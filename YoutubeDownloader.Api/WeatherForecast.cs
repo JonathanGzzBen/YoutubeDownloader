@@ -1,6 +1,6 @@
 using System;
 
-namespace YoutubeDownloader
+namespace YoutubeDownloader.Api
 {
     public class WeatherForecast
     {

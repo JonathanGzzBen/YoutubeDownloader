@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace YoutubeDownloader.Controllers
+namespace YoutubeDownloader.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiVersion("1")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
