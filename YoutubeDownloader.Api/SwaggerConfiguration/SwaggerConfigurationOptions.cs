@@ -32,14 +32,13 @@ namespace YoutubeDownloader.Api.SwaggerConfiguration
                         Title = $"YoutubeDownloader API {description.ApiVersion}",
                         Version = description.ApiVersion.ToString()
                     });
-
-                options.OperationFilter<RemoveVersionParameterFilter>();
-                options.DocumentFilter<ReplaceVersionWithExactValueInPathFilter>();
             }
 
             var xmlCommentFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var xmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentFile);
             options.IncludeXmlComments(xmlCommentsFullPath);
+            options.OperationFilter<RemoveVersionParameterFilter>();
+            options.DocumentFilter<ReplaceVersionWithExactValueInPathFilter>();
         }
     }
 }
