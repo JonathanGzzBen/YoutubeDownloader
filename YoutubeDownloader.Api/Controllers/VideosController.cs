@@ -1,8 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 
 namespace YoutubeDownloader.Api.Controllers
 {
@@ -22,5 +28,22 @@ namespace YoutubeDownloader.Api.Controllers
             var videoDetails = await Core.YoutubeDownloader.GetVideo(videoUrl);
             return Ok(videoDetails);
         }
+
+        [HttpGet("download")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Download(string videoUrl)
+        {
+            try
+            {
+                var videoStream = await Core.YoutubeDownloader.GetMuxedWithHighestVideoQualityStream(videoUrl);
+                return File(videoStream, "application/octet-stream", "youtube-download.mp4");
+            }
+            catch (Exception e)
+            {
+                return NotFound("No video with that url found.");
+            }
+
+        }
+
     }
 }
