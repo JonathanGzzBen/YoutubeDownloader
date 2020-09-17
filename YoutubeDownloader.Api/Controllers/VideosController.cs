@@ -35,6 +35,7 @@ namespace YoutubeDownloader.Api.Controllers
         {
             try
             {
+                var videoDetails = await Core.YoutubeDownloader.GetVideo(videoUrl);
                 Stream videoStream;
 
                 if (videoOnly)
@@ -42,7 +43,7 @@ namespace YoutubeDownloader.Api.Controllers
                 else
                     videoStream = await Core.YoutubeDownloader.GetMuxedWithHighestVideoQualityStream(videoUrl);
 
-                return File(videoStream, "application/octet-stream", "youtube-download.mp4");
+                return File(videoStream, "application/octet-stream", (videoDetails.Title + ".mp4"));
             }
             catch
             {
