@@ -31,14 +31,20 @@ namespace YoutubeDownloader.Api.Controllers
 
         [HttpGet("download")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Download(string videoUrl)
+        public async Task<IActionResult> Download(string videoUrl, bool videoOnly = false)
         {
             try
             {
-                var videoStream = await Core.YoutubeDownloader.GetMuxedWithHighestVideoQualityStream(videoUrl);
+                Stream videoStream;
+
+                if (videoOnly)
+                    videoStream = await Core.YoutubeDownloader.GetVideoOnlyWithHighestVideoQuality(videoUrl);
+                else
+                    videoStream = await Core.YoutubeDownloader.GetMuxedWithHighestVideoQualityStream(videoUrl);
+
                 return File(videoStream, "application/octet-stream", "youtube-download.mp4");
             }
-            catch (Exception e)
+            catch
             {
                 return NotFound("No video with that url found.");
             }
