@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -12,14 +13,18 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace YoutubeDownloader.Api.SwaggerConfiguration
 {
-    public class SwaggerConfigurationOptions : IConfigureOptions<SwaggerGenOptions>
+    public class VersionedSwaggerGenOptions : IConfigureOptions<SwaggerGenOptions>
     {
         private readonly IApiVersionDescriptionProvider _provider;
 
-        public SwaggerConfigurationOptions(IApiVersionDescriptionProvider provider)
+        public VersionedSwaggerGenOptions(IApiVersionDescriptionProvider provider)
         {
             _provider = provider;
         }
+
+        public static string GroupNameFormat => "'v'VVV";
+
+        public static ApiVersion DefaultApiVersion => new ApiVersion(1, 0);
 
         public void Configure(SwaggerGenOptions options)
         {

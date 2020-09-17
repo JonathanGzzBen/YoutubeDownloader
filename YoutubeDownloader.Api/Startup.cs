@@ -29,13 +29,13 @@ namespace YoutubeDownloader.Api
             services.AddApiVersioning(options =>
             {
                 options.AssumeDefaultVersionWhenUnspecified = true;
-                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.DefaultApiVersion = VersioningSwaggerGenOptions.DefaultApiVersion;
                 options.ReportApiVersions = true;
             });
 
-            services.AddVersionedApiExplorer(options => options.GroupNameFormat = "'v'VVV");
-            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, SwaggerConfigurationOptions>();
+            services.AddVersionedApiExplorer(options => options.GroupNameFormat = VersioningSwaggerGenOptions.GroupNameFormat);
             services.AddSwaggerGen();
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, VersioningSwaggerGenOptions>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
