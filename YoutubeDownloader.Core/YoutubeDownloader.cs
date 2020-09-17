@@ -26,5 +26,19 @@ namespace YoutubeDownloader.Core
 
             return null;
         }
+
+        public static async Task<Stream> GetVideoOnlyWithHighestVideoQuality(string url)
+        {
+            var youtube = new YoutubeClient();
+            var streamManifest = await youtube.Videos.Streams.GetManifestAsync(url);
+            var streamInfo = streamManifest.GetVideoOnly().WithHighestVideoQuality();
+            if (streamInfo != null)
+            {
+                return await youtube.Videos.Streams.GetAsync(streamInfo);
+            }
+
+            return null;
+        }
+
     }
 }

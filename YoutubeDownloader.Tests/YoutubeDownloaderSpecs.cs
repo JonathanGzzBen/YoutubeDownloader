@@ -29,5 +29,19 @@ namespace YoutubeDownloader.Tests
 
             File.Delete(testFileName);
         }
+
+        [Theory]
+        [InlineData("https://www.youtube.com/watch?v=DkAHBVur-N4")]
+        public async Task GetVideoOnlyWithHighestVideoQualityStream_ValidUrl_GetsValidVideoStream(string url)
+        {
+            await using var stream = await Core.YoutubeDownloader.GetVideoOnlyWithHighestVideoQuality(url);
+            var testFileName = @"test.mp4";
+            await using var fileStream = File.Create(testFileName);
+            await stream.CopyToAsync(fileStream);
+
+            Assert.True(File.Exists(testFileName));
+
+            File.Delete(testFileName);
+        }
     }
 }
