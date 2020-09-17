@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace YoutubeDownloader.Api.Controllers
 {
     [ApiController]
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/v{version:apiVersion}/weather")]
     [ApiVersion("1")]
     public class WeatherForecastController : ControllerBase
     {
