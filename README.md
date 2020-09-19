@@ -12,8 +12,8 @@ To build the Docker image yourself, you can run the next commands:
 # From solution directory
 $ docker build -f YoutubeDownloader.Api/Dockerfile -t youtubedownloader-api .
 
-# This is an example on how to run it.
+# This is an example of how to run it.
 $ docker run -d -p 5000:80 youtubedownloader-api
 
-# You can see it running on localhost:5000
+# You can now see it running on localhost:5000
 ```
