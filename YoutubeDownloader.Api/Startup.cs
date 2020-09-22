@@ -63,6 +63,14 @@ namespace YoutubeDownloader.Api
 
             app.UseRouting();
 
+            if (env.IsDevelopment())
+            {
+                app.UseCors(c => c
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+            }
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
