@@ -37,7 +37,7 @@ namespace YoutubeDownloader.Api
             });
 
             services.AddVersionedApiExplorer(options => options.GroupNameFormat = VersionedSwaggerGenOptions.GroupNameFormat);
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(options => options.UseInlineDefinitionsForEnums());
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, VersionedSwaggerGenOptions>();
         }
 

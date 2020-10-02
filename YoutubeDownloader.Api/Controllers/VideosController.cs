@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+using YoutubeExplode.Videos;
 
 namespace YoutubeDownloader.Api.Controllers
 {
@@ -25,6 +25,7 @@ namespace YoutubeDownloader.Api.Controllers
         /// <param name="videoUrl"></param>
         /// <returns></returns>
         [HttpGet("details")]
+        [ProducesResponseType(typeof(Video), StatusCodes.Status200OK)]
         public async Task<IActionResult> Details([Required]string videoUrl)
         {
             var videoDetails = await Core.YoutubeDownloader.GetVideo(videoUrl);
@@ -32,6 +33,7 @@ namespace YoutubeDownloader.Api.Controllers
         }
 
         [HttpGet("download")]
+        [ProducesResponseType(typeof(Stream), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Download([Required]string videoUrl, DownloadType downloadType = DownloadType.Muxed)
         {
