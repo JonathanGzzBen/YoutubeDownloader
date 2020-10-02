@@ -25,7 +25,7 @@ namespace YoutubeDownloader.Api.Controllers
         /// <param name="videoUrl"></param>
         /// <returns></returns>
         [HttpGet("details")]
-        public async Task<IActionResult> Details(string videoUrl)
+        public async Task<IActionResult> Details([Required]string videoUrl)
         {
             var videoDetails = await Core.YoutubeDownloader.GetVideo(videoUrl);
             return Ok(videoDetails);
@@ -33,7 +33,7 @@ namespace YoutubeDownloader.Api.Controllers
 
         [HttpGet("download")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Download(string videoUrl, DownloadType downloadType = DownloadType.Muxed)
+        public async Task<IActionResult> Download([Required]string videoUrl, DownloadType downloadType = DownloadType.Muxed)
         {
             try
             {
