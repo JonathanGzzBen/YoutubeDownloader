@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +17,7 @@ namespace YoutubeDownloader.Api.Controllers
     [ApiController]
     [Route("api/v{version:apiVersion}/videos")]
     [ApiVersion("1")]
-    public class VideosController : ControllerBase
+    public partial class VideosController : ControllerBase
     {
         /// <summary>
         /// Get details of video with specified url.
@@ -31,17 +33,16 @@ namespace YoutubeDownloader.Api.Controllers
 
         [HttpGet("download")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Download(string videoUrl, bool videoOnly = false)
+        public async Task<IActionResult> Download(string videoUrl, DownloadType downloadType = DownloadType.Muxed)
         {
             try
             {
                 var videoDetails = await Core.YoutubeDownloader.GetVideo(videoUrl);
-                Stream videoStream;
-
-                if (videoOnly)
-                    videoStream = await Core.YoutubeDownloader.GetVideoOnlyWithHighestVideoQuality(videoUrl);
-                else
-                    videoStream = await Core.YoutubeDownloader.GetMuxedWithHighestVideoQualityStream(videoUrl);
+                Stream videoStream = downloadType switch
+                {
+                    DownloadType.VideoOnly => await Core.YoutubeDownloader.GetVideoOnlyWithHighestVideoQuality(videoUrl),
+                    _ => await  Core.YoutubeDownloader.GetMuxedWithHighestVideoQualityStream(videoUrl)
+                };
 
                 return File(videoStream, "application/octet-stream", (videoDetails.Title + ".mp4"));
             }
@@ -53,4 +54,15 @@ namespace YoutubeDownloader.Api.Controllers
         }
 
     }
+
+    public partial class VideosController
+    {
+        public enum DownloadType
+        {
+            Muxed,
+            SoundOnly,
+            VideoOnly
+        }
+    }
+
 }
