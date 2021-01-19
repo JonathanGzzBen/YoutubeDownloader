@@ -1,14 +1,17 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
-WORKDIR /app
+# https://hub.docker.com/_/microsoft-dotnet
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+WORKDIR /source
 
-# Copy everything to working directory
+# copy everything to build environment
 COPY . ./
 
-# Build project
-RUN dotnet publish YoutubeDownloader.Api -c Release -o YoutubeDownloader.Api/out
+# build app
+WORKDIR /source/YoutubeDownloader.Api
+RUN dotnet publish -c release -o /app
 
-# Build runtime image
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+# final stage/image
+FROM mcr.microsoft.com/dotnet/aspnet:5.0
 WORKDIR /app
-COPY --from=build-env /app/YoutubeDownloader.Api/out .
+COPY --from=build /app ./
 ENTRYPOINT ["dotnet", "YoutubeDownloader.Api.dll"]
+
